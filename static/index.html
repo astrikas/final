@@ -1,0 +1,107 @@
+<html>
+<head>
+  <title>Watch Party</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rowdies:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/static/style.css"></link>
+</head>
+<body>
+
+
+
+
+
+<div class="container">
+
+
+  
+
+
+
+    <hero>
+    <logo>
+      <img id="tv" src="/static/tv.jpeg">
+      <img id="popcorn" src="/static/popcorn.png">
+    </logo>
+    <h1>Watch Party</h1>
+  </hero>
+
+  <!-- First thing the user sees when visitng the site-->
+  <div class="login page">
+    <h2>Welcome to Watch Party!</h2>
+    <p>Enter a email</p>
+    <input id="loginEmail" type="email"></input>
+    <p>Enter a password</p>
+    <input id="loginPassword" type="password"></input>
+    <a href="javascript: void(0)" id="registerLink">Don't have an account? Click to register</a>
+    <button id="login">Login</button>
+  </div>
+
+  <div class="register page">
+    <h2>Welcome to Watch Party!</h2>
+    <p>Enter a username</p>
+    <input id="username" type="text"></input>
+    <p>Enter an email</p>
+    <input id="email" type="email"></input>
+    <p>Enter a password</p>
+    <input id="password" type="password"></input>
+    <p>Retype password</p>
+    <input id="confirmPassword" type="password"></input>
+    <button id="register">Register</button>
+  </div>
+<div class="chat_index_page page">
+  <div class="main_container">
+    <!-- Channels Column -->
+    <div class="channels_col">
+      <ul class="chats">
+        <!-- populate via ajax request -->
+      </ul>
+      <p>Enter a name for the new chat</p>
+      <input id="newName" type="text"></input>
+      <button id="createChat">Create a Chat!</button>
+    </div>
+    <!-- Messages Column -->
+    <div class="messages_col">
+          <div class="chat">
+            <div class="comment_box">
+              <form>
+                <label for="comment">What do you have to say?</label>
+                <textarea id="text_input" name="comment"></textarea>
+                <button id="postMessage" type="button" value="Post">Post</button>
+              </form>
+            </div>
+            <div class="messages">
+            </div>
+          </div>
+    </div>
+    <!-- Replies Column -->
+    <div class="replies_col">
+        <form>
+          <label for="comment">Reply</label>
+          <textarea id="reply_input" name="comment"></textarea>
+          <button id="postReply" type="button" value="Post">Reply</button>
+        </form>
+    </div>
+  
+  </div>
+</div>
+
+
+  <!-- Chat Messages Page
+  <div class="chat_page page">
+      <div>
+        <p>Invite users to this chat at:</p>
+        <a href="javascript: void(0)" id="invite_link"></a>
+      </div>
+    <div class="clip">
+ 
+    </div>
+  </div> -->
+
+</div>
+
+<script src="/static/script.js"></script>
+</body>
+</html>

@@ -84,14 +84,14 @@ SQLite 3. Because graders must use the same environment to evaluate
 submissions from multiple students, please do not require any additional
 programs or packages to be installed. In your submission, include a README with
 instructions for how to configure and run your app:
+
 - First, graders will run your migrations in lexical order from the command line.
   ~~To make sure your database does not conflict with other students, use your
   GitLab name as the name of your database.~~
 - Then, graders will start your app with a `flask run` command from the command
   line. Graders will have their FLASK_APP environment variable set to "app," so
   name your Flask file `app.py`.
-- Graders will have the packages in `requirements.txt` installed with `pip3 install
-  -r requirements.txt`. If you feel strongly that you need a package not listed
+- Graders will have the packages in `requirements.txt` installed with `pip3 install -r requirements.txt`. If you feel strongly that you need a package not listed
   there, ask on the course Slack.
 - Graders will try to access your app in their browser at the URL that Flask
   prints to the command line, e.g. `* Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)`
@@ -104,34 +104,39 @@ collaborated with and any materials you consulted.
 ### Rubric (30 points possible - point values to be updated)
 
 Database (5 points)
+
 - Create database and tables with migrations in version control. Database
   supports Unicode characters
-- Tables for channels, messages, and users
-- Store passwords securely by hashing them with bcrypt
+  x - Tables for channels, messages, and users
+  x - Store passwords securely by hashing them with bcrypt
 - Sanitize all database inputs
 - Efficiently store last read message per channel per user
 
 API (4 points)
-- Login endpoint
-- Authenticate to other endpoints via session token in the request header (not as a URL param)
-- Endpoints to create and get channels and messages
+x - Login endpoint
+x - Authenticate to other endpoints via session token in the request header (not as a URL param)
+x - Endpoints to create and get channels and messages
+
 - Get new message counts by channel without fetching all the message contents
 
 Responsive Layout (5 points)
-- Login and username update flows
-- Show channels, messages, and replies (when shown) in 3-column grid
-- Show/hide threaded replies
-- On narrow screens, one-column layout with menu bar
+x - Login and username update flows
+x - Show channels, messages, and replies (when shown) in 3-column grid
+x - Show/hide threaded replies
+x - On narrow screens, one-column layout with menu bar
+
 - Parse image URLs that appear in messages and display the images at the end of
   the message
 
 Single-Page State (4 points)
-- Only serve one HTML request
-- Push channel and thread location to the history and navigation bar
-- Loading the unique URL of a channel or thread should open the app to that
-  channel or thread.
+x - Only serve one HTML request
+x - Push channel and thread location to the history and navigation bar
+?- Loading the unique URL of a channel or thread should open the app to that
+channel or thread.
+
 - Track last read message per channel
 
 Asynchronous Request Handling (2 points)
+
 - Continuously poll for new messages, only in the channel the user is in
 - Continuously poll for new unread message counts per channel
