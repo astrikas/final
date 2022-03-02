@@ -13,25 +13,8 @@ import bcrypt
 #     connection.executescript(f.read())
     
 
-# cur = connection.cursor()
 
-# cur.execute("INSERT INTO channels (channel_name, created_by_id) VALUES (?, ?)",
-#             ('testchannel', 1)
-#             )
 
-# connection.commit()
-# connection.close()
-    
-
-# cur.execute("INSERT INTO posts (title, content) VALUES (?, ?)",
-#             ('First Post', 'Content for the first post')
-#             )
-
-# cur.execute("INSERT INTO posts (title, content) VALUES (?, ?)",
-#             ('Second Post', 'Content for the second post')
-#             )
-
-# connection.commit()
 
 
 def get_db_connection():    
@@ -191,7 +174,8 @@ def create_route():
         user = getUser(email, session_token)
         # Create new chat
         conn = get_db_connection()
-        cur = conn.execute('INSERT INTO channels (channel_name, created_by_id) VALUES (?,?)', [channel_name, user['id']])
+        magic_link = ''.join(random.choices(string.ascii_uppercase + string.digits, k=20))
+        cur = conn.execute('INSERT INTO channels (channel_name, created_by_id, magic_link) VALUES (?,?, ?)', [channel_name, user['id'], magic_link])
         conn.commit()
         conn.close()
         lastChannelId = cur.lastrowid
@@ -239,17 +223,24 @@ def chat_messages(chat_id):
                     
             return jsonify({"success": True, "chat": dictChat })
 #Get messages using a magic phrase 
-@app.route("/magic_phrase/<magic_phrase>")
-def chat_messages_using_magic_phrase(magic_phrase):
+@app.route("/magic_link/<magic_link>")
+def chat_messages_using_magic_link(magic_link):
     # Grab session token from header to validate User
     session_token = request.headers['authorization']
-    username = request.headers['username']
-    # Grab that chat
-    if validateUser(username, session_token):
-        for k,v in chats.items():
-            if v["magic_phrase"] == magic_phrase:
-                chats[k]['authorized_users'].append(username)
-                return jsonify({"chat_id": k, "messages": v['messages'], "magic_phrase": v['magic_phrase'] })
+    email = request.headers['email']
+    # Validate magic link is legimate
+    if validateUser(email, session_token):
+        user = getUser(email, session_token)
+        channel = query_db('SELECT * from channels WHERE magic_link = ?', [magic_link], True)
+        if channel is None: 
+            return jsonify({"error_message": 'Chat not found' })
+        else:
+            exists = query_db('SELECT * from unread WHERE user_id = ? AND channel_id = ?', [user['id'], channel['id']], True)
+            if exists is None: 
+                insertUnread(user['id'], channel['id'], 0)
+                return jsonify({"success": True, 'chat_id': channel['id']})
+        
+        
     else:
         return jsonify({"error_message": 'User is not logged in' })
     
@@ -267,28 +258,82 @@ def create_message_route():
         conn = get_db_connection()
         cur = conn.execute('INSERT INTO messages (channel_id, body, author_id) VALUES (?,?,?)', [chat_id, new_message, user['id']])
         conn.commit()
+        # Grab last message
+        message = query_db('SELECT messages.*, users.username FROM messages JOIN users ON messages.author_id = users.id WHERE messages.id = ?', [cur.lastrowid], True)
+        dictMessage = dict(message)
+        dictMessage['replies'] = []
+        
+        # Update unread counters for any user in this channel
+        cur = conn.execute('UPDATE unread SET num_unread = num_unread + 1 WHERE user_id != ? AND channel_id = ?', [user['id'], chat_id])
+        conn.commit()
+        conn.close()
+        
+        
+        return jsonify({"success": True, 'message': dictMessage})
+    return jsonify({"success": False})
+
+
+@app.route("/reply", methods = ["POST"])
+def reply_to():
+    session_token = request.headers['authorization']
+    email = request.headers['email']
+    # Reply to message id
+    print(request.json)
+    reply_to_message_id = request.json["reply_message_to_id"]
+    new_message = request.json["new_message"]
+    chat_id = request.json["chat_id"]
+
+    if validateUser(email, session_token):
+        # Insert message into database
+        user = getUser(email, session_token)
+        conn = get_db_connection()
+        cur = conn.execute('INSERT INTO messages (channel_id, body, author_id, replies_to) VALUES (?,?,?, ?)', [chat_id, new_message, user['id'], reply_to_message_id])
+        conn.commit()
         conn.close()
         # Grab last message
         message = query_db('SELECT messages.*, users.username FROM messages JOIN users ON messages.author_id = users.id WHERE messages.id = ?', [cur.lastrowid], True)
-        return jsonify({"success": True, 'message': dict(message)})
+        dictMessage = dict(message)
+        dictMessage['replies'] = []
+        return jsonify({"success": True, 'message': dictMessage})
     return jsonify({"success": False})
 
-# @app.route("/auth", methods = ["POST"])
-# def get_message_route():
-#     user_name = request.json["user_name"]
-#     room = request.json["room"]
-#     if len(chats)==0:
-#         return jsonify("no chats")
-#     else:
-#         chat_users = chats[int(room)]
-#         # for each chat_user object - separate the key / values?
-#         for k,v in chat_users['authorized_users'].items():
-#             # for each value - get the username
-#             # print(v['username'])
-#             if v['username'] == user_name:
-#                 return jsonify({ "success": True})
+@app.route("/unread_counts")
+def unread():
+    # Grab session token from header to validate User
+    session_token = request.headers['authorization']
+    email = request.headers['email']
+    # Grab that chat
+    if validateUser(email, session_token):
+        user = getUser(email, session_token)
+        unread_counts = query_db('SELECT * FROM unread WHERE user_id = ?', [user['id']])
+        unread_arr = []
+        print(unread_arr)
+        for row in unread_counts:
+                dictUnread = dict(row)
+                unread_arr.append(dictUnread)
         
-#         return jsonify({"success": False})
+                    
+        return jsonify({"success": True, "unread": unread_arr })
+    return jsonify({"success": False })
+
+@app.route("/clear_unread/<chat_id>", methods = ["POST"])
+def clear_unread(chat_id):
+    session_token = request.headers['authorization']
+    email = request.headers['email']
+
+
+    if validateUser(email, session_token):
+        # Insert message into database
+        user = getUser(email, session_token)
+        conn = get_db_connection()
+        # Update unread counters for any user in this channel
+        conn.execute('UPDATE unread SET num_unread = 0 WHERE user_id = ? AND channel_id = ?', [user['id'], chat_id])
+        conn.commit()
+        conn.close()
+        
+        
+        return jsonify({"success": True})
+    return jsonify({"success": False})
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')

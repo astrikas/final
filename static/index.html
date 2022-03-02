@@ -51,10 +51,12 @@
     <input id="confirmPassword" type="password"></input>
     <button id="register">Register</button>
   </div>
+
 <div class="chat_index_page page">
   <div class="main_container">
     <!-- Channels Column -->
-    <div class="channels_col">
+    <div class="channels_col col">
+      <h2>Channels</h2>
       <ul class="chats">
         <!-- populate via ajax request -->
       </ul>
@@ -63,7 +65,10 @@
       <button id="createChat">Create a Chat!</button>
     </div>
     <!-- Messages Column -->
-    <div class="messages_col">
+    <div class="messages_col col">
+          <button class="mobile_back_to_channels_button">Back</button>
+          <p>Invite your friends using this link: <span id="invite_link"></span></p>
+          <h2>Messages</h2>
           <div class="chat">
             <div class="comment_box">
               <form>
@@ -77,12 +82,16 @@
           </div>
     </div>
     <!-- Replies Column -->
-    <div class="replies_col">
+    <div class="replies_col col">
+      <button class="mobile_back_to_messages_button">Back</button>
+      <h2>Reply</h2>
         <form>
           <label for="comment">Reply</label>
           <textarea id="reply_input" name="comment"></textarea>
           <button id="postReply" type="button" value="Post">Reply</button>
         </form>
+           <div class="replies">
+            </div>
     </div>
   
   </div>

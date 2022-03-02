@@ -1,3 +1,21 @@
+SOURCES
+https://www.youtube.com/watch?v=QiTq5WrWoJw
+
+https://www.youtube.com/results?search_query=slack+ben+awad
+
+https://www.youtube.com/watch?v=Oo4ziTddOxs
+
+https://www.youtube.com/watch?v=a-JKj7m2LIo
+https://www.youtube.com/watch?v=a-JKj7m2LIo
+
+https://www.youtube.com/watch?v=Oo4ziTddOxs
+
+https://www.youtube.com/results?search_query=slack+ben+awad
+
+https://www.youtube.com/watch?v=QiTq5WrWoJw
+
+https://www.youtube.com/watch?v=a-JKj7m2LIo
+
 # [DRAFT] Final Project: Belay (a Slack clone)
 
 30 points
@@ -105,19 +123,19 @@ collaborated with and any materials you consulted.
 
 Database (5 points)
 
-- Create database and tables with migrations in version control. Database
-  supports Unicode characters
-  x - Tables for channels, messages, and users
-  x - Store passwords securely by hashing them with bcrypt
-- Sanitize all database inputs
-- Efficiently store last read message per channel per user
+\*- Create database and tables with migrations in version control. Database
+supports Unicode characters
+x - Tables for channels, messages, and users
+x - Store passwords securely by hashing them with bcrypt
+x - Sanitize all database inputs
+x - Efficiently store last read message per channel per user
 
 API (4 points)
 x - Login endpoint
 x - Authenticate to other endpoints via session token in the request header (not as a URL param)
 x - Endpoints to create and get channels and messages
 
-- Get new message counts by channel without fetching all the message contents
+x- Get new message counts by channel without fetching all the message contents
 
 Responsive Layout (5 points)
 x - Login and username update flows
@@ -125,18 +143,21 @@ x - Show channels, messages, and replies (when shown) in 3-column grid
 x - Show/hide threaded replies
 x - On narrow screens, one-column layout with menu bar
 
-- Parse image URLs that appear in messages and display the images at the end of
-  the message
+\*- Parse image URLs that appear in messages and display the images at the end of
+the message
 
 Single-Page State (4 points)
 x - Only serve one HTML request
 x - Push channel and thread location to the history and navigation bar
-?- Loading the unique URL of a channel or thread should open the app to that
+
+x- Loading the unique URL of a channel or thread should open the app to that
 channel or thread.
 
-- Track last read message per channel
+x- Track last read message per channel
 
 Asynchronous Request Handling (2 points)
 
-- Continuously poll for new messages, only in the channel the user is in
-- Continuously poll for new unread message counts per channel
+x- Continuously poll for new messages, only in the channel the user is in
+(have to click on reply count for replies to poll)
+
+x- Continuously poll for new unread message counts per channel
