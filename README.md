@@ -6,6 +6,7 @@ https://www.youtube.com/results?search_query=slack+ben+awad
 https://www.youtube.com/watch?v=Oo4ziTddOxs
 
 https://www.youtube.com/watch?v=a-JKj7m2LIo
+
 https://www.youtube.com/watch?v=a-JKj7m2LIo
 
 https://www.youtube.com/watch?v=Oo4ziTddOxs
@@ -122,6 +123,8 @@ collaborated with and any materials you consulted.
 ### Rubric (30 points possible - point values to be updated)
 
 Database (5 points)
+
+- not completed
 
 \*- Create database and tables with migrations in version control. Database
 supports Unicode characters
